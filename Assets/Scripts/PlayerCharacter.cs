@@ -26,10 +26,10 @@ public class PlayerCharacter : MonoBehaviour
     private bool isOnGround;
     private Collider2D[] groundHitDetectionResults = new Collider2D[16];
     private Checkpoint currentCheckpoint;
+    private bool doubleJump = false;
 
-
-	// Update is called once per frame
-	void Update ()
+    // Update is called once per frame
+    void Update ()
     {
         UpdateIsOnGround();
         UpdateHorizontalInput();
@@ -66,9 +66,12 @@ public class PlayerCharacter : MonoBehaviour
 
     private void HandleJumpInput()
     {
-        if (Input.GetButtonDown("Jump") && isOnGround)
+        if (Input.GetButtonDown("Jump") && (isOnGround || !doubleJump))
         {
             rb2d.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+
+            if (!doubleJump && !isOnGround)
+                doubleJump = true;
         }
         
     }
@@ -79,6 +82,9 @@ public class PlayerCharacter : MonoBehaviour
         Vector2 clampedVelocity = rb2d.velocity;
         clampedVelocity.x = Mathf.Clamp(rb2d.velocity.x, -maxSpeed, maxSpeed);
         rb2d.velocity = clampedVelocity;
+
+        if (isOnGround)
+            doubleJump = false;
     }
 
     public void Respawn()

@@ -7,8 +7,14 @@ public class Checkpoint : MonoBehaviour
     [SerializeField]
     private float inactivatedRotationSpeed = 100, activatedRotationSpeed = 500 ;
     [SerializeField]
-    private float inactivatedScale = 1, activatedScale = 1.5f;
+    private float inactivatedScale = 1, activatedScale = 1f;
     private bool isActivated;
+    private AudioSource audioSource;
+
+    private void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
 
     private void Update()
     {
@@ -36,6 +42,7 @@ public class Checkpoint : MonoBehaviour
 
     public void SetIsActivated(bool value)
     {
+        audioSource.Play();
         isActivated = value;
         UpdateScale();
     }
@@ -44,6 +51,7 @@ public class Checkpoint : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
+            
             PlayerCharacter player = collision.GetComponent<PlayerCharacter>();
             player.SetCurrentCheckpoint(this);
         }

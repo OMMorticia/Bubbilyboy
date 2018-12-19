@@ -5,7 +5,16 @@ using UnityEngine.SceneManagement;
 
 public class Door : MonoBehaviour
 {
+    [SerializeField]
+    private string sceneToLoad;
+
     private bool isPlayerInTrigger;
+    private AudioSource audioSource;
+
+    private void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -27,7 +36,8 @@ public class Door : MonoBehaviour
     {
         if (Input.GetButtonDown("Activate") && isPlayerInTrigger)
         {
-            SceneManager.LoadScene("Scene2");
+            audioSource.Play();
+            SceneManager.LoadScene(sceneToLoad);
         }
     }
 }
